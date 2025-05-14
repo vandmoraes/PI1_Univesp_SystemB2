@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Clientes</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #34495e;
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            width: 85%;
+            margin: 20px auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+        }
+        button {
+            grid-column: 1 / -1;
+            padding: 10px;
+            background-color: #00bcd4;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0097a7;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        th {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        td a {
+            text-decoration: none;
+            margin: 0 5px;
+            font-size: 18px;
+        }
+        .btn-home {
+            background-color: #00bcd4;
+            padding: 8px 14px;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn-home:hover {
+            background-color: #0097a7;
+        }
+        footer {
+            margin-top: 30px;
+            background-color: #34495e;
+            color: white;
+            text-align: center;
+            font-size: 13px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <strong>Controle de Clientes</strong>
+    <a href="{% url 'home' %}" class="btn-home">🏠 Início</a>
+</header>
+
+<div class="container">
+    <h3>Cadastro de Cliente</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+
+    <h3>Lista de Clientes</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>RG</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.rg  }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.telefone_celular }}</td>
+                <td>
+                    <a href="{% url 'editar_cliente' cliente.id %}">✏️</a>
+                    <a href="{% url 'excluir_cliente' cliente.id %}" onclick="return confirm('Deseja excluir este cliente?');">🗑️</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Nenhum cliente cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<footer>
+    Rua Honorio Mendes de Moraes, 88 - Centro - São Roque/SP<br>
+    Expediente: Segunda à Sábado das 9h00 às 20h00<br>
+    &copy; 2025 System B2
+</footer>
+
+</body>
+</html>

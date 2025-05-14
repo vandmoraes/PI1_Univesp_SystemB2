@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Agendamento</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #34495e;
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            width: 85%;
+            margin: 20px auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+        }
+        textarea {
+            grid-column: 1 / -1;
+            resize: vertical;
+        }
+        button {
+            grid-column: 1 / -1;
+            padding: 10px;
+            background-color: #00bcd4;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0097a7;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px 8px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        th {
+            background-color: #ecf0f1;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        td a {
+            text-decoration: none;
+            margin: 0 5px;
+            font-size: 18px;
+        }
+        .btn-home {
+            background-color: #00bcd4;
+            padding: 8px 14px;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .btn-home:hover {
+            background-color: #0097a7;
+        }
+        footer {
+            margin-top: 30px;
+            background-color: #34495e;
+            color: white;
+            text-align: center;
+            font-size: 13px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <strong>Controle de Agendamento</strong>
+    <a href="{% url 'home' %}" class="btn-home">🏠 Início</a>
+</header>
+
+<div class="container">
+    <h2>Cadastro de Agendamentos</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Confirmar Agendamento</button>
+    </form>
+
+    <h2>Lista de Agendamentos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Solicitado</th>
+                <th>Agendado</th>
+                <th>Horário</th>
+                <th>Cliente</th>
+                <th>Profissional</th>
+                <th>Serviços</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agendamento in agendamentos %}
+            <tr>
+                <td>{{ agendamento.data_solicitado|date:"d/m/Y" }}</td>
+                <td>{{ agendamento.data_agendado|date:"d/m/Y" }}</td>
+                <td>{{ agendamento.horario }}</td>
+                <td>{{ agendamento.cliente }}</td>
+                <td>{{ agendamento.profissional }}</td>
+                <td>{{ agendamento.servicos }}</td>
+                <td>
+                    <a href="{% url 'editar_agendamento' agendamento.id %}">✏️</a>
+                    <a href="{% url 'deletar_agendamento' agendamento.id %}" onclick="return confirm('Deseja excluir este agendamento?');">🗑️</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">Nenhum agendamento encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<footer>
+    Rua Honorio Mendes de Moraes, 88 - Centro - São Roque/SP<br>
+    Expediente: Segunda à Sábado das 9h00 às 20h00<br>
+    &copy; 2025 System B2
+</footer>
+
+</body>
+</html>

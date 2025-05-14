@@ -1,0 +1,130 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>System B2 - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b3fdfc;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            font-size: 20px;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .nav a button {
+            background-color: red;
+            color: white;
+            margin: 0 15px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .content {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .content h2 {
+            font-size: 28px;
+            color: #333;
+        }
+        .content p {
+            font-size: 18px;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #eee;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <strong>System B2</strong> - Gestão e Controle de Agendamentos para Salão de Beleza e BarberShop
+</header>
+
+<div class="nav">
+    <a href="{% url 'listar_profissionais' %}"><button>Profissionais</button></a>
+    <a href="{% url 'listar_clientes' %}"><button>Clientes</button></a>
+    <a href="{% url 'listar_agendamentos' %}"><button>Agendamento</button></a>
+</div>
+
+<div class="content">
+
+    <h2>Próximos Atendimentos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Data Solicitado</th>
+                <th>Data Agendado</th>
+                <th>Horário</th>
+                <th>Cliente</th>
+                <th>Profissional</th>
+                <th>Serviços</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agendamento in agendamentos %}
+            <tr>
+                <td>{{ agendamento.data_solicitado|date:"d/m/Y H:i" }}</td>
+                <td>{{ agendamento.data_agendado|date:"d/m/Y" }}</td>
+                <td>{{ agendamento.horario|time:"H:i" }}</td>
+                <td>{{ agendamento.cliente.nome }}</td>
+                <td>{{ agendamento.profissional.nome }}</td>
+                <td>{{ agendamento.servicos }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Nenhum atendimento agendado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<footer>
+    Rua Honorio Mendes de Moraes, 88 - Centro - São Roque/SP<br>
+    Expediente: Segunda à Sábado das 9h00 às 20h00<br>
+    Copyright 2025 - System B2
+</footer>
+
+</body>
+</html>
